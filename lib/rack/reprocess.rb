@@ -36,9 +36,8 @@ module Rack
         raise ArgumentError, "can only include below #{script_name}, not #{path}"
       end
 
-      env[SCRIPT_NAME] = script_name
-      env[PATH_INFO] = path.gsub(/^#{script_name}/, '')
-      stack.last[:app].call(env)
+      path_info = path.gsub(/^#{script_name}/, '')
+      stack.last[:app].call(env.merge({ SCRIPT_NAME => script_name, PATH_INFO => path_info}))
     end
   end
 end
